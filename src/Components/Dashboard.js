@@ -1,8 +1,10 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { unAuthorised } from '../ReduxStore/Action';
+import { unAuthorised, setHorsesData } from '../ReduxStore/Action';
 import Axios from 'axios';
 
+
+//Staller123#
 const Dashboard = (props) => {
     const logoutUser = () => {
         props.unAuthorised();
@@ -12,22 +14,31 @@ const Dashboard = (props) => {
         const getHorese = async () => {
             const { userData } = props;
             const config = { headers: { "Authorization": `Bearer ${userData ? userData.data.access_token : ''}` } }
-            const horses = await Axios.get("/horses", config);
-            console.log(horses.data);
+            try {
+                const horses = await Axios.get("/horses", config);
+                props.setHorsesData(horses.data)
+            } catch (err) {
+                console.log(err)
+            }
         }
         getHorese();
-    })
+    }, []);
+    
+    console.log(props.horses)
     return (
         <Fragment>
             <h1 style={{ textAlign: 'center' }}>
-                Welcome to the dashboard
                 <button className="btn-danger" onClick={logoutUser}>Logout</button>
+                {props.horses.data && props.horses.data.map(horse => {
+                    console.log(horse);
+                })}
             </h1>
         </Fragment>
     )
 }
 
 const mapStateToProps = (state) => ({
-    userData: state.data
+    userData: state.data,
+    horses: state.horses
 })
-export default connect(mapStateToProps, { unAuthorised })(Dashboard);
+export default connect(mapStateToProps, { unAuthorised, setHorsesData })(Dashboard);

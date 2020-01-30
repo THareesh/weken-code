@@ -1,7 +1,8 @@
 
 const defaultState = {
     auth: false,
-    data: []
+    data: [],
+    horses: []
 }
 
 const reducer = (state = defaultState, action) => {
@@ -15,8 +16,14 @@ const reducer = (state = defaultState, action) => {
         case "USER_UN_AUTHORISED": return {
             ...state,
             auth: false,
-            data: []
+            data: [],
+            horses: []
         }
+        case "SET_HORSES_DATA":
+            return {
+                ...state,
+                horses: data
+            }
         default: return state;
     }
 };
