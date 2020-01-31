@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { authenticated, unAuthorised } from './ReduxStore/Action';
 import './App.css'
 import Axios from 'axios';
+import Register from './Components/Register'
 
 const userDataStatus = JSON.parse(localStorage.getItem("user"));
 
@@ -20,13 +21,14 @@ const App = (props) => {
       props.unAuthorised();
       localStorage.removeItem("user");
     }
-  },[]);
+  }, []);
 
   return (
     <Router>
       <Switch>
         <Route exact path="/" component={Auth} />
         <AuthRoute exact path="/dashboard" component={Dashboard} isAuth={props.isAuth} />
+        <AuthRoute exact path="/register" component={Register} isAuth={props.isAuth} />
         <Redirect to="/" />
       </Switch>
     </Router>
